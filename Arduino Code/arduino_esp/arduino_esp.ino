@@ -19,6 +19,17 @@ int type = 0;
 
 int containerNum = 0;
 
+//L293D <----- PARA SA MOTOR ---->
+//Motor A
+const int motorPin1  = 5;  // Pin 14 of L293
+const int motorPin2  = 6;  // Pin 10 of L293
+//Motor B
+const int motorPin3  = 10; // Pin  7 of L293
+const int motorPin4  = 9;  // Pin  2 of L293
+//Motor C
+const int motorPin5 = 11;  // Pin  7 of L293 2nd
+const int motorPin6 = 12;  // Pin  2 of L293 2nd
+
 #include <LiquidCrystal.h>
 
 LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
@@ -36,11 +47,48 @@ void loop()
         String input = Serial.readString();
         injectToBuffer(input);
         displayData();
-        clearAllArray();
         delay(WT);
-        allClear();
+        // allClear();
         // ang imo code paano mag hulog bulong
+        if(containerNum > 0){
+          getCartridgeToDrop(containerNum); // para ka drop kung diin nga catridge
+          Serial.println("Andar sensor!");// check sensor function 
+        }
+        clearAllArray();
     }
+}
+
+void getCartridgeToDrop(int cartridge){
+
+  // code to activate servo motor(?)
+  if(cartridge == 1){
+    //This code  will turn Motor A clockwise for 2 sec.
+    Serial.println("digitalWrite(motorPin1, HIGH)");
+    delay (2000);
+
+   //And this code will stop motors
+    Serial.println("digitalWrite(motorPin1, LOW)");
+    delay (2000);
+  }
+  if(cartridge == 2){
+    //This code  will turn Motor B clockwise for 2 sec.
+    Serial.println("digitalWrite(motorPin3, HIGH)");
+    delay (2000);
+
+   //And this code will stop motors
+    Serial.println("digitalWrite(motorPin3, LOW)");
+    delay (2000);
+  }
+  if(cartridge == 3){
+     //This code  will turn Motor C clockwise for 2 sec.
+    Serial.println("digitalWrite(motorPin5, HIGH)");
+    delay (2000);
+
+   //And this code will stop motors
+    Serial.println("digitalWrite(motorPin5, LOW)");
+    delay (2000);
+  }
+  
 }
 
 void injectToBuffer(String thisString)
@@ -65,8 +113,8 @@ void displayData()
     else
     {
         Serial.println("NONE FOUND");
-        allClear();
-        row1Display("NONE FOUND");
+        //allClear();
+        //row1Display("NONE FOUND");
         delay(WT);
     }
 }
